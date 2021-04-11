@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +15,6 @@ public class ImportService {
     private final CsvToDtoMapper csvToDtoMapper = new CsvToDtoMapper();
 
     public void importTrafficData(byte[] bytes) throws IOException {
-        csvToDtoMapper.csvToDtoList(bytes, TrafficDataDto.class);
+        List<TrafficDataDto> dtos = csvToDtoMapper.csvToDtoList(bytes, TrafficDataDto.class);
     }
 }
