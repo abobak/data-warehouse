@@ -8,4 +8,5 @@ public interface ImportApi {
 
     void importTrafficData(MultipartFile f) throws IOException;
 
+    void resetTrafficData();
 }

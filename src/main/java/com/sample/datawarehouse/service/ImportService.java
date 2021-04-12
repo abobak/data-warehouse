@@ -24,4 +24,8 @@ public class ImportService {
         List<TrafficDataDto> dtos = csvToDtoMapper.csvToDtoList(bytes, TrafficDataDto.class);
         trafficDataRepository.saveAll(trafficDataMapper.dtoListToEntityList(dtos));
     }
+
+    public void reset() {
+        trafficDataRepository.deleteAll();
+    }
 }
