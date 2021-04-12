@@ -2,7 +2,7 @@ package com.sample.datawarehouse.mapper;
 
 import com.sample.datawarehouse.dto.TrafficDataDto;
 import com.sample.datawarehouse.model.TrafficData;
-import org.mapstruct.AfterMapping;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
@@ -13,7 +13,7 @@ public interface TrafficDataMapper {
 
     TrafficData dtoToEntity(TrafficDataDto dto);
 
-    @AfterMapping
+    @BeforeMapping
     default void calculateCtr(TrafficDataDto dto, @MappingTarget TrafficData target) {
         Double ctr = (Double.valueOf(dto.getClicks()) / Double.valueOf(dto.getImpressions())) * 100;
         target.setCtr(ctr);

@@ -26,4 +26,16 @@ public class TrafficDataMapperTest {
         assertEquals(2.0, data.getCtr());
     }
 
+    @Test
+    void shouldPopulateTrafficDataFromDto() {
+        TrafficDataDto dto = new TrafficDataDto("a", "b", LocalDate.of(11, 11, 11), 10, 500);
+        TrafficData data = mapper.dtoToEntity(dto);
+        assertEquals(2.0, data.getCtr());
+        assertEquals("a", data.getDataSource());
+        assertEquals("b", data.getCampaign());
+        assertEquals(LocalDate.of(11, 11, 11), data.getDaily());
+        assertEquals(10, data.getClicks());
+        assertEquals(500, data.getImpressions());
+    }
+
 }
