@@ -50,5 +50,19 @@ public class ImportDataIntegrationTest {
         assertThrows(UnrecognizedPropertyException.class, () -> importService.importTrafficData(payload.getBytes()));
     }
 
+    @Test
+    void shouldDeleteAllEntriesWhenResetWasRequested() throws IOException {
+        String payload = "Datasource,Campaign,Daily,Clicks,Impressions\n" +
+                "Google Ads,Adventmarkt Touristik,11/12/19,7,22425\n" +
+                "Google Ads,Adventmarkt Touristik,11/13/19,16,45452\n" +
+                "Google Ads,Adventmarkt Touristik,11/14/19,147,80351\n" +
+                "Google Ads,Adventmarkt Touristik,11/15/19,131,81906\n" +
+                "Google Ads,Adventmarkt Touristik,11/16/19,85,43910";
+        importService.importTrafficData(payload.getBytes());
+        importService.reset();
+        List<TrafficData> importedData = trafficDataRepository.findAll();
+        assertEquals(0, importedData.size());
+    }
+
 
 }
