@@ -13,4 +13,7 @@ public interface TrafficDataRepository extends JpaRepository<TrafficData, Long> 
             "from TrafficData td " +
             "where td.campaign = :campaign and td.daily >= :from and td.daily <= :to")
     Integer getTotalClicks(@Param("campaign") String campaing, @Param("from") LocalDate from, @Param("to") LocalDate to);
+
+    @Query("select avg(td.ctr) from TrafficData td where td.campaign = :campaign and td.dataSource = :dataSource")
+    Double getAverageCtr(@Param("campaign") String campaign, @Param("dataSource") String datasource);
 }

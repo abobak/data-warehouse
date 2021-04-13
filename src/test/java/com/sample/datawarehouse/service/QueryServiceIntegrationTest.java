@@ -1,7 +1,10 @@
 package com.sample.datawarehouse.service;
 
+import com.sample.datawarehouse.dto.CtrPerCampaignAndDatasource;
 import com.sample.datawarehouse.dto.TotalClicksDto;
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -29,20 +32,33 @@ public class QueryServiceIntegrationTest {
     @Autowired
     private QueryService queryService;
 
-    @ParameterizedTest
-    @MethodSource("getDatesAndExpectedClicks")
-    void shouldCountClicksInCampaignForExpectedDateRange(LocalDate from, LocalDate to, Integer expectedClicks) throws IOException {
-        String campaignParam = "Adventmarkt Touristik";
+    @BeforeEach
+    void setUp() throws IOException {
         String payload = "Datasource,Campaign,Daily,Clicks,Impressions\n" +
                 "Google Ads,Adventmarkt Touristik,11/12/19,7,22425\n" +
                 "Google Ads,Adventmarkt Touristik,11/13/19,16,45452\n" +
-                "Google Ads,Imaginecup,11/12/19,7,22425\n" +
-                "Google Ads,Imaginecup,11/13/19,16,45452\n" +
+                "Google Ads,Imaginecup,11/12/19,8,400\n" +
+                "Google Ads,Imaginecup,11/13/19,16,320\n" +
                 "Google Ads,Adventmarkt Touristik,11/14/19,147,80351\n";
         importService.importTrafficData(payload.getBytes());
+    }
+
+    @ParameterizedTest
+    @MethodSource("getDatesAndExpectedClicks")
+    void shouldCountClicksInCampaignForExpectedDateRange(LocalDate from, LocalDate to, Integer expectedClicks) {
+        String campaignParam = "Adventmarkt Touristik";
 
         TotalClicksDto clicks = queryService.getTotalClicksForCampaign(campaignParam, from, to);
         assertEquals(expectedClicks, clicks.getTotalClicks());
+    }
+
+    @Test
+    void shouldCountAverageCtrForCampaignAndDatasource() {
+        String campaignParam = "Imaginecup";
+        String dataSource = "Google Ads";
+        Double expectedCtr = 3.5; // ((8/400 + 16/320)/2) * 100
+        CtrPerCampaignAndDatasource res = queryService.getCtrPerCampaignAndDatasource(campaignParam, dataSource);
+        assertEquals(expectedCtr, res.getCtr());
     }
 
     private static Stream<Arguments> getDatesAndExpectedClicks() {

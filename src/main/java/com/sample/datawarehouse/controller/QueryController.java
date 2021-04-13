@@ -1,6 +1,7 @@
 package com.sample.datawarehouse.controller;
 
 import com.sample.datawarehouse.api.QueryApi;
+import com.sample.datawarehouse.dto.CtrPerCampaignAndDatasource;
 import com.sample.datawarehouse.dto.TotalClicksDto;
 import com.sample.datawarehouse.service.QueryService;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,18 @@ public class QueryController implements QueryApi {
     private final QueryService queryService;
 
     @GetMapping("/api/v1/campaign-clicks")
-    public TotalClicksDto getTotalClicksForCampaign(@RequestParam String campaign, @RequestParam String from, @RequestParam String to) {
+    public TotalClicksDto getTotalClicksForCampaign(
+            @RequestParam String campaign, @RequestParam String from, @RequestParam String to) {
         return queryService.getTotalClicksForCampaign(
                 campaign,
                 LocalDate.parse(from, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                 LocalDate.parse(to, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+    }
+
+    @GetMapping("/api/v1/ctr")
+    public CtrPerCampaignAndDatasource getCtrPerCampaignAndDatasource(
+            @RequestParam String campaign, @RequestParam String datasource) {
+        return queryService.getCtrPerCampaignAndDatasource(campaign, datasource);
     }
 
 }
