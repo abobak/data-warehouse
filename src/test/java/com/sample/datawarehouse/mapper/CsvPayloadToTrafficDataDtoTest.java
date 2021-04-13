@@ -1,6 +1,7 @@
 package com.sample.datawarehouse.mapper;
 
 import com.sample.datawarehouse.dto.TrafficDataDto;
+import com.sample.datawarehouse.model.TrafficData;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
